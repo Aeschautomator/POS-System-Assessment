@@ -11,7 +11,7 @@ public class Inventory implements com.bridgephase.store.interfaces.IInventory {
 	public Inventory() {
 		currentInventory = new ArrayList<Product>();
 	}
-	
+//	adding this comment to properly commit after a sucessful test
 	public void replenish(InputStream inputStream) {
 		List<Product> newProducts = ProductFactory.createInventory(inputStream);
 //	 avoid duplicate entries in current entry by insuring only one product per upc exists
