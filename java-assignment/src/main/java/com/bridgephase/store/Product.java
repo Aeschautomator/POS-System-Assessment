@@ -23,6 +23,8 @@ public void setName(String newName) {
 
 public abstract boolean add(Product p); 
 
+public abstract boolean reduce(double sold);
+
 public abstract Number getWholeSalePrice();
 
 public abstract void  setWholeSalePrice(Number wholeSalePrice);

@@ -4,12 +4,12 @@ public class ItemProduct extends Product {
 
 	private double wholeSalePrice;
 	private double retailPrice;
-	private int quantity;
+	private double quantity;
 	
 	public ItemProduct() {
 		
 	}
-	public ItemProduct(String upc, String name, double wholeSalePrice, double retailPrice, int quantity) {
+	public ItemProduct(String upc, String name, double wholeSalePrice, double retailPrice, double quantity) {
 		this.name = name;
 		this.upc = upc;
 		this.quantity = quantity;
@@ -20,7 +20,7 @@ public class ItemProduct extends Product {
 	public boolean add(Product p) {
 		if(p == null) return false;
 		if (p.upc != upc) return false;
-		quantity += p.getQuantity().intValue(); 
+		quantity += p.getQuantity().doubleValue(); 
 		return true;
 
 	}
@@ -56,8 +56,16 @@ public class ItemProduct extends Product {
 
 	@Override
 	public void setQuantity(Number quantity) {
-		this.quantity = quantity.intValue();
+		this.quantity = quantity.doubleValue();
 
+	}
+	@Override
+	public boolean reduce(double sold) {
+		if(quantity >= sold) {
+			quantity -= sold;
+			return true;
+		}
+		return false;
 	}
 
 }
