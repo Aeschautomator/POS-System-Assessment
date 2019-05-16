@@ -8,7 +8,8 @@ public class ItemProductTest {
 
 	@Test
 	public void test() {
-//	TODO test something in ItemProduct?
+
+		Product apple = new ItemProduct();
 	}
 
 }

@@ -26,22 +26,19 @@ public class StoreApplication {
 	 * @param args
 	 */
 	public static void main(String args[]) {
-		// TODO: The wrapping of everything in a try/catch is not very clean
-		// if only there was a way to avoid this?
-		try {
+	
 			InputStream input = inputStreamFromString(
 					"upc,name,wholesalePrice,retailPrice,quantity\n" + 
-					"A123,Apple,0.50,1.00,100");
+					"A123,Apple,0.50,1.00,100\nB234,Peach,0.35,0.75,200\n" + "C123,Milk,2.15,4.50,40");
 			IInventory inventory = new Inventory();
-			inventory.replenish(input);
+			if (input != null) inventory.replenish(input);
 
 			for (Product product : inventory.list()) {
 				System.out.println("Found a product " + product);
 			}
-		} catch (Exception e) {
-			System.out.println("Something went wrong");
+
 		}
-	}
+
 
 	/**
 	 * This is a simple way to convert a string to an input stream.
@@ -52,7 +49,12 @@ public class StoreApplication {
 	 *         <code>value</code> parameter
 	 * @throws UnsupportedEncodingException
 	 */
-	private static InputStream inputStreamFromString(String value) throws UnsupportedEncodingException {
-		return new ByteArrayInputStream(value.getBytes("UTF-8"));
+	private static InputStream inputStreamFromString(String value) {
+		try {
+			return new ByteArrayInputStream(value.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,15 +12,16 @@ import java.util.List;
 import com.bridgephase.store.interfaces.IInventory;
 
 public class CashRegister {
-	public IInventory inventory;
-	public HashMap<String, Product> map;
-	public boolean inTransaction;
-	public List<String> transaction;
-	public double total;
-	public double numberOfItems;
-	public double paid;
-	public double change;
-	public BufferedWriter receipt; 
+	protected IInventory inventory;
+	protected HashMap<String, Product> map;
+	protected boolean inTransaction;
+	protected List<String> transaction;
+	protected double total;
+	protected int numberOfItems;
+	protected double paid;
+	protected double change;
+	protected BufferedWriter receipt; 
+	private NumberFormat currency = NumberFormat.getCurrencyInstance();
 	
 	CashRegister(IInventory inventory) {
 		this.inventory = inventory;
@@ -43,7 +45,7 @@ public class CashRegister {
 		total = 0;
 	}
 
-	public boolean scan(String upc, double amount) {
+	public boolean scan(String upc, int amount) {
 		if (!inTransaction)
 			return false;
 		Product product = map.get(upc);
@@ -57,9 +59,9 @@ public class CashRegister {
 		return false;
 	}
 
-	public void addTransaction(Product product, double amount) {
+	public void addTransaction(Product product, int amount) {
 		double cost = product.getRetailPrice().doubleValue() * amount;
-		String t = amount + " " + product.getName() + " @ $" + product.getRetailPrice() + ":" + cost;
+		String t = amount + " " + product.getName() + " @ " + currency.format(product.getRetailPrice()) + ": " + currency.format(cost);
 		total += cost;
 		numberOfItems += amount;
 		transaction.add(t);
@@ -70,7 +72,7 @@ public class CashRegister {
 	}
 
 	public BigDecimal pay(BigDecimal cashAmount) {
-		change = total - cashAmount.doubleValue();
+		change = cashAmount.doubleValue() - total;
 //			if it is negative, they still owe money
 		paid = cashAmount.doubleValue();
 		return new BigDecimal(change);
@@ -93,11 +95,11 @@ public class CashRegister {
 			}
 			receipt.write("-----------------------------");
 			receipt.newLine();
-			receipt.write("Total: $" + total);
+			receipt.write("Total: " + currency.format(total));
 			receipt.newLine();
-			receipt.write("Paid: $" + paid);
+			receipt.write("Paid: " + currency.format(paid));
 			receipt.newLine();
-			receipt.write("Change: $" + change);
+			receipt.write("Change: " + currency.format(change));
 			receipt.newLine();
 			receipt.write("-----------------------------");
 			receipt.close();

@@ -2,6 +2,7 @@ package com.bridgephase.store;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,11 +24,13 @@ public class Inventory implements com.bridgephase.store.interfaces.IInventory {
 			cmap.put(prod.getUpc(), prod);
 		}
 		size = newProducts.size();
+//		update list and map
 		for(int i=0; i<size; i++) {
 			Product prod = newProducts.get(i);
 			Product currentProd = cmap.get(prod.getUpc());
 			if(currentProd == null) {
 				currentInventory.add(prod);
+				cmap.put(prod.getUpc(), prod);
 			} else {
 				currentProd.add(prod);
 			}
@@ -37,7 +40,7 @@ public class Inventory implements com.bridgephase.store.interfaces.IInventory {
 	}
 
 	public List<Product> list(){
-		return currentInventory;
+		return Collections.unmodifiableList(currentInventory);
 		
 	}
 	

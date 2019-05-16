@@ -4,6 +4,7 @@ public abstract class Product {
 	
 	protected String upc;
 	protected String name;
+	protected Number WholeSalePrice;
 	
 public String getName() {
   return name;
